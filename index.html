@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#f4f5f9;}
+  a{color:#3457ff;text-decoration:none;}
+  a:hover{color:#1e3fe0;text-decoration:underline;}
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.35;}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#161b2e;">
+
+  <!-- ===================== APP SCREEN ===================== -->
+  <div style="min-height:100vh;display:flex;flex-direction:column;background:#f4f5f9;">
+
+    <!-- Header -->
+    <div style="height:76px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:linear-gradient(115deg,#0b1130 0%,#0d1436 55%,#20306e 72%,#0b1130 88%);">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#4f6bff,#8b5cf6);transform:rotate(45deg);flex-shrink:0;"></div>
+        <div>
+          <div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:0.3px;">WORKSPACE AI BRAIN</div>
+          <div style="color:#95a0d6;font-size:11.5px;letter-spacing:0.4px;">Enterprise Knowledge Intelligence</div>
+        </div>
+      </div>
+      <div style="flex:1;max-width:520px;margin:0 32px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:10px 16px;">
+        <span style="color:#8d97cf;font-size:14px;">⌕</span>
+        <span style="color:#c4cbef;font-size:13.5px;flex:1;">Ask anything about your workspace…</span>
+        <span style="color:#6d78ad;font-size:11px;border:1px solid rgba(255,255,255,0.18);border-radius:5px;padding:2px 6px;">Ctrl+K</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="text-align:right;">
+          <div style="color:#fff;font-size:13px;font-weight:600;">Data &amp; Ops Team</div>
+          <div style="color:#8d97cf;font-size:11.5px;">Admin</div>
+        </div>
+        <div style="width:34px;height:34px;border-radius:50%;background:#3457ff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;">AC</div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div style="flex:1;display:flex;">
+
+      <!-- Sidebar -->
+      <div style="width:220px;flex-shrink:0;background:linear-gradient(180deg,#0d1436,#141d47);display:flex;flex-direction:column;padding:18px 12px;">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="11">
+            <div onClick="{{ item.select }}" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;cursor:pointer;background:{{ item.rowBg }};">
+              <span style="width:7px;height:7px;border-radius:3px;flex-shrink:0;background:{{ item.dotBg }};"></span>
+              <span style="font-size:13.5px;color:{{ item.textColor }};font-weight:{{ item.textWeight }};">{{ item.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,0.06);border-radius:9px;padding:10px 12px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:#4285f4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">G</div>
+            <span style="color:#c4cbef;font-size:12px;">Connected to Google Workspace</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:9px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:#c4cbef;font-size:12px;">AI Brain Status</span>
+            <span style="display:flex;align-items:center;gap:5px;color:#4ade80;font-size:11.5px;font-weight:600;">
+              <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulseDot 1.6s infinite;"></span>Ready
+            </span>
+          </div>
+          <a href="#workflow-section" style="text-align:center;color:#8d97cf;font-size:11.5px;padding-top:4px;">How it works ↓</a>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div style="flex:1;padding:24px 28px;overflow:hidden;">
+
+        <!-- ===== AI CHAT VIEW ===== -->
+        <sc-if value="{{ isChat }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:20px;align-items:start;">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="display:flex;justify-content:flex-end;">
+                  <div style="max-width:80%;">
+                    <div style="background:#eef1ff;border-radius:12px 12px 2px 12px;padding:10px 14px;font-size:13.5px;">Find all documents related to Project Nova</div>
+                    <div style="text-align:right;color:#9aa0b8;font-size:11px;margin-top:4px;">10:24 AM</div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+                <div style="font-size:14px;margin-bottom:16px;">Here are the documents related to <b>Project Nova</b> across Google Workspace.</div>
+                <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;">
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#8a90a6;">Total Results</div><div style="font-size:19px;font-weight:700;margin-top:2px;">34</div></div>
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#8a90a6;">Drive Files</div><div style="font-size:19px;font-weight:700;margin-top:2px;">19</div></div>
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#8a90a6;">Gmail Threads</div><div style="font-size:19px;font-weight:700;margin-top:2px;">7</div></div>
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#8a90a6;">Docs &amp; Sheets</div><div style="font-size:19px;font-weight:700;margin-top:2px;">5</div></div>
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#8a90a6;">Meetings</div><div style="font-size:19px;font-weight:700;margin-top:2px;">3</div></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <span style="font-size:12.5px;color:#8a90a6;font-weight:600;">TOP RELEVANT DOCUMENTS</span>
+                  <span style="font-size:12px;color:#8a90a6;">Most relevant ▾</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ documentsTop }}" as="doc" hint-placeholder-count="5">
+                    <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid #eef0f5;border-radius:10px;">
+                      <div style="width:30px;height:30px;border-radius:7px;flex-shrink:0;background:{{ doc.color }};color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ doc.code }}</div>
+                      <div style="flex:1;min-width:0;">
+                        <div style="font-size:13.5px;font-weight:600;">{{ doc.title }}</div>
+                        <div style="font-size:11.5px;color:#8a90a6;">{{ doc.source }} · {{ doc.path }}</div>
+                      </div>
+                      <div style="font-size:11.5px;color:#8a90a6;flex-shrink:0;">{{ doc.time }}</div>
+                      <div style="font-size:11.5px;font-weight:700;color:#16a34a;background:#eafaf0;border-radius:6px;padding:3px 8px;flex-shrink:0;">{{ doc.score }}%</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="text-align:center;margin-top:14px;"><a href="#" style="font-size:13px;">View all 34 results →</a></div>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#b7bcd0;">＋</span>
+                <span style="flex:1;color:#a7abc0;font-size:13px;">Ask a follow-up…</span>
+                <div style="width:32px;height:32px;border-radius:50%;background:#3457ff;color:#fff;display:flex;align-items:center;justify-content:center;">➤</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Overview</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <sc-for list="{{ overviewStats }}" as="s" hint-placeholder-count="5">
+                    <div><div style="font-size:11.5px;color:#8a90a6;">{{ s.label }}</div><div style="font-size:18px;font-weight:700;margin-top:2px;">{{ s.value }}</div><div style="font-size:11px;color:#8a90a6;">{{ s.sub }}</div></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Sources</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ sources }}" as="src" hint-placeholder-count="7">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:26px;height:26px;border-radius:6px;background:{{ src.color }};color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ src.code }}</div>
+                      <div style="flex:1;font-size:12.5px;">{{ src.name }}</div>
+                      <div style="font-size:12px;color:#8a90a6;">{{ src.count }} {{ src.unit }}</div>
+                      <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;"></span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:10px;">Recent activity</div>
+                <sc-for list="{{ recentActivity }}" as="a" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f2f6;font-size:12.5px;">
+                    <span>{{ a.text }}</span><span style="color:#8a90a6;flex-shrink:0;margin-left:8px;">{{ a.time }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Top queries</div>
+                <sc-for list="{{ topQueries }}" as="q" hint-placeholder-count="5">
+                  <div style="margin-bottom:9px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>{{ q.rank }}. {{ q.label }}</span><span style="color:#8a90a6;">{{ q.count }}</span></div>
+                    <div style="height:5px;background:#eef0f6;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ q.pct }}%;background:#3457ff;"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:10px;">Knowledge map</div>
+                <svg width="100%" height="170" viewBox="0 0 260 170">
+                  <line x1="130" y1="85" x2="40" y2="30" stroke="#dfe2ee" stroke-width="1.5"></line>
+                  <line x1="130" y1="85" x2="220" y2="30" stroke="#dfe2ee" stroke-width="1.5"></line>
+                  <line x1="130" y1="85" x2="35" y2="140" stroke="#dfe2ee" stroke-width="1.5"></line>
+                  <line x1="130" y1="85" x2="225" y2="140" stroke="#dfe2ee" stroke-width="1.5"></line>
+                  <circle cx="130" cy="85" r="26" fill="#3457ff"></circle>
+                  <text x="130" y="89" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Nova</text>
+                  <circle cx="40" cy="30" r="14" fill="#2f80ed"></circle>
+                  <circle cx="220" cy="30" r="14" fill="#ef4444"></circle>
+                  <circle cx="35" cy="140" r="14" fill="#16a34a"></circle>
+                  <circle cx="225" cy="140" r="14" fill="#f59e0b"></circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== DASHBOARD VIEW ===== -->
+        <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Dashboard</div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;">
+              <sc-for list="{{ overviewStats }}" as="s" hint-placeholder-count="5">
+                <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:16px;">
+                  <div style="font-size:12px;color:#8a90a6;">{{ s.label }}</div>
+                  <div style="font-size:24px;font-weight:700;margin-top:4px;">{{ s.value }}</div>
+                  <div style="font-size:11.5px;color:#8a90a6;">{{ s.sub }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:14px;">Connected sources</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+                <sc-for list="{{ sources }}" as="src" hint-placeholder-count="7">
+                  <div style="border:1px solid #eef0f5;border-radius:12px;padding:14px;">
+                    <div style="width:32px;height:32px;border-radius:8px;background:{{ src.color }};color:#fff;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">{{ src.code }}</div>
+                    <div style="font-size:13px;font-weight:600;">{{ src.name }}</div>
+                    <div style="font-size:11.5px;color:#8a90a6;">{{ src.count }} {{ src.unit }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Recent activity</div>
+                <sc-for list="{{ recentActivity }}" as="a" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f2f6;font-size:13px;">
+                    <span>{{ a.text }}</span><span style="color:#8a90a6;">{{ a.time }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Top queries</div>
+                <sc-for list="{{ topQueries }}" as="q" hint-placeholder-count="5">
+                  <div style="margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><span>{{ q.rank }}. {{ q.label }}</span><span style="color:#8a90a6;">{{ q.count }}</span></div>
+                    <div style="height:6px;background:#eef0f6;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ q.pct }}%;background:#3457ff;"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== SOURCES VIEW ===== -->
+        <sc-if value="{{ isSources }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Sources</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+              <sc-for list="{{ sources }}" as="src" hint-placeholder-count="7">
+                <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                    <div style="width:38px;height:38px;border-radius:9px;background:{{ src.color }};color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;">{{ src.code }}</div>
+                    <div style="flex:1;">
+                      <div style="font-size:14.5px;font-weight:700;">{{ src.name }}</div>
+                      <div style="font-size:11.5px;color:#8a90a6;">Connected via API</div>
+                    </div>
+                    <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span>
+                  </div>
+                  <div style="font-size:20px;font-weight:700;">{{ src.count }}</div>
+                  <div style="font-size:12px;color:#8a90a6;margin-bottom:10px;">{{ src.unit }} indexed</div>
+                  <div style="font-size:11.5px;color:#8a90a6;">Last sync: {{ src.sync }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== DOCUMENTS VIEW ===== -->
+        <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Documents</div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:8px;">
+              <sc-for list="{{ documentsAll }}" as="doc" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid #f1f2f6;">
+                  <div style="width:32px;height:32px;border-radius:7px;background:{{ doc.color }};color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ doc.code }}</div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-size:14px;font-weight:600;">{{ doc.title }}</div>
+                    <div style="font-size:12px;color:#8a90a6;">{{ doc.source }} · {{ doc.path }}</div>
+                  </div>
+                  <div style="font-size:12px;color:#8a90a6;flex-shrink:0;">{{ doc.time }}</div>
+                  <div style="font-size:12px;font-weight:700;color:#16a34a;background:#eafaf0;border-radius:6px;padding:4px 9px;flex-shrink:0;">{{ doc.score }}%</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== EMAILS VIEW ===== -->
+        <sc-if value="{{ isEmails }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Emails</div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:8px;">
+              <sc-for list="{{ emails }}" as="e" hint-placeholder-count="5">
+                <div style="display:flex;gap:14px;padding:14px 12px;border-bottom:1px solid #f1f2f6;">
+                  <div style="width:32px;height:32px;border-radius:7px;background:#ef4444;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">Gm</div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;justify-content:space-between;"><span style="font-size:14px;font-weight:600;">{{ e.subject }}</span><span style="font-size:12px;color:#8a90a6;flex-shrink:0;">{{ e.date }}</span></div>
+                    <div style="font-size:12.5px;color:#8a90a6;margin:2px 0 4px;">{{ e.from }}</div>
+                    <div style="font-size:12.5px;color:#5a6079;">{{ e.snippet }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== MEETINGS VIEW ===== -->
+        <sc-if value="{{ isMeetings }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Meetings</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <sc-for list="{{ meetings }}" as="m" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:16px;">
+                  <div style="font-size:14.5px;font-weight:700;margin-bottom:4px;">{{ m.title }}</div>
+                  <div style="font-size:12.5px;color:#8a90a6;margin-bottom:10px;">{{ m.date }} · {{ m.time }}</div>
+                  <div style="display:flex;gap:6px;margin-bottom:10px;">
+                    <sc-for list="{{ m.attendees }}" as="p" hint-placeholder-count="3">
+                      <div style="width:24px;height:24px;border-radius:50%;background:#3457ff;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ p }}</div>
+                    </sc-for>
+                  </div>
+                  <div style="font-size:12px;color:#3457ff;">🔗 {{ m.linkedDoc }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== CALENDAR VIEW ===== -->
+        <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Calendar</div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;">
+                <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+                  <div style="text-align:center;padding:12px 0;border-radius:10px;background:#f6f7fb;">
+                    <div style="font-size:11px;color:#8a90a6;">{{ d.name }}</div>
+                    <div style="font-size:16px;font-weight:700;margin:4px 0;">{{ d.num }}</div>
+                    <sc-if value="{{ d.has }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:6px;border-radius:50%;background:#3457ff;display:inline-block;"></span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:18px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Upcoming events</div>
+              <sc-for list="{{ meetings }}" as="m" hint-placeholder-count="4">
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f2f6;">
+                  <span style="font-size:13.5px;font-weight:600;">{{ m.title }}</span>
+                  <span style="font-size:12.5px;color:#8a90a6;">{{ m.date }} · {{ m.time }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== INSIGHTS VIEW ===== -->
+        <sc-if value="{{ isInsights }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Insights</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Top queries</div>
+                <sc-for list="{{ topQueries }}" as="q" hint-placeholder-count="5">
+                  <div style="margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><span>{{ q.rank }}. {{ q.label }}</span><span style="color:#8a90a6;">{{ q.count }}</span></div>
+                    <div style="height:6px;background:#eef0f6;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ q.pct }}%;background:#3457ff;"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Usage by source</div>
+                <sc-for list="{{ usageBySource }}" as="u" hint-placeholder-count="5">
+                  <div style="margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><span>{{ u.name }}</span><span style="color:#8a90a6;">{{ u.pct }}%</span></div>
+                    <div style="height:6px;background:#eef0f6;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ u.pct }}%;background:{{ u.color }};"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:20px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:14px;">Impact</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <sc-for list="{{ impactItems }}" as="i" hint-placeholder-count="5">
+                  <div style="background:#f6f7fb;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;">{{ i.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== SPREADSHEETS VIEW ===== -->
+        <sc-if value="{{ isSpreadsheets }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Spreadsheets</div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:8px;">
+              <sc-for list="{{ spreadsheetItems }}" as="s" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid #f1f2f6;">
+                  <div style="width:32px;height:32px;border-radius:7px;background:#16a34a;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">Sh</div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:600;">{{ s.title }}</div><div style="font-size:12px;color:#8a90a6;">{{ s.path }}</div></div>
+                  <div style="font-size:12px;color:#8a90a6;">{{ s.modified }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== ACTIONS VIEW ===== -->
+        <sc-if value="{{ isActions }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Actions</div>
+            <div style="font-size:13px;color:#8a90a6;">Automations the AI Brain can trigger via n8n on your behalf.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <sc-for list="{{ actionItems }}" as="a" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:16px;">
+                  <div style="font-size:14px;font-weight:700;">{{ a.title }}</div>
+                  <div style="font-size:12.5px;color:#8a90a6;margin:6px 0 10px;">{{ a.desc }}</div>
+                  <div style="display:inline-block;font-size:11px;font-weight:600;color:#3457ff;background:#eef1ff;border-radius:6px;padding:3px 8px;">{{ a.app }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== BOOKMARKS VIEW ===== -->
+        <sc-if value="{{ isBookmarks }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:20px;font-weight:700;">Bookmarks</div>
+            <div style="background:#fff;border:1px solid #e6e8f0;border-radius:14px;padding:8px;">
+              <sc-for list="{{ bookmarkItems }}" as="b" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid #f1f2f6;">
+                  <div style="width:32px;height:32px;border-radius:7px;background:{{ b.color }};color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ b.code }}</div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:600;">{{ b.title }}</div><div style="font-size:12px;color:#8a90a6;">{{ b.source }}</div></div>
+                  <span style="color:#f59e0b;">★</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== WORKFLOW SECTION ===================== -->
+  <div id="workflow-section" style="background:#080b16;padding:70px 40px;">
+    <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#38bdf8;font-size:12.5px;letter-spacing:1px;margin-bottom:10px;">▸ THE AI-POWERED WORKFLOW // 01</div>
+    <div style="color:#fff;font-size:38px;font-weight:700;margin-bottom:10px;">How Workspace AI Brain Works</div>
+    <div style="color:#8890b3;font-size:15px;margin-bottom:46px;max-width:640px;">From a single natural-language request to intelligent enterprise actions, orchestrated with n8n.</div>
+
+    <div style="display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding-bottom:20px;">
+      <sc-for list="{{ flowStages }}" as="st" hint-placeholder-count="8">
+        <div style="display:flex;align-items:flex-start;">
+          <div style="width:230px;flex-shrink:0;">
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#5c6690;font-size:11px;letter-spacing:1px;margin-bottom:10px;">STEP {{ st.step }}</div>
+            <div style="background:#0f1329;border:1px solid #1c2140;border-left:3px solid {{ st.color }};border-radius:10px;padding:14px;margin-bottom:12px;position:relative;">
+              <div style="position:absolute;left:-4px;top:16px;width:7px;height:7px;border-radius:50%;background:{{ st.color }};"></div>
+              <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;color:{{ st.color }};letter-spacing:0.6px;margin-bottom:6px;">{{ st.type }}</div>
+              <div style="color:#fff;font-size:14.5px;font-weight:700;margin-bottom:2px;">{{ st.title }}</div>
+              <sc-if value="{{ st.isBranch }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;">
+                  <sc-for list="{{ sources }}" as="src" hint-placeholder-count="7">
+                    <div style="display:flex;align-items:center;gap:6px;background:#161a35;border-radius:6px;padding:5px 7px;">
+                      <div style="width:16px;height:16px;border-radius:4px;background:{{ src.color }};color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ src.code }}</div>
+                      <span style="color:#c4c9e6;font-size:10.5px;">{{ src.name }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="color:#7076a0;font-size:12px;line-height:1.5;padding-right:14px;">{{ st.desc }}</div>
+          </div>
+          <div style="color:#3a4270;font-size:20px;padding:16px 10px 0;flex-shrink:0;">→</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:24px;margin-top:40px;">
+      <div style="background:#0f1329;border:1px solid #1c2140;border-radius:14px;padding:22px;">
+        <div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:0.6px;margin-bottom:16px;">TECHNOLOGY STACK</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+          <sc-for list="{{ techStackItems }}" as="t" hint-placeholder-count="4">
+            <div style="background:#161a35;border-radius:10px;padding:12px;">
+              <div style="color:#e4e7ff;font-size:12.5px;font-weight:700;margin-bottom:4px;">{{ t.label }}</div>
+              <div style="color:#7076a0;font-size:11px;">{{ t.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#0f1329;border:1px solid #1c2140;border-radius:14px;padding:22px;">
+        <div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:0.6px;margin-bottom:16px;">IMPACT</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ impactItems }}" as="i" hint-placeholder-count="5">
+            <div style="background:#161a35;border-radius:8px;padding:8px 12px;color:#c4c9e6;font-size:12px;font-weight:600;">{{ i.label }}</div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: 'chat' };
+
+  setView(v) { this.setState({ view: v }); }
+
+  renderVals() {
+    const view = this.state.view;
+    const navKeys = [
+      ['chat','AI Chat'],['dashboard','Dashboard'],['sources','Sources'],['documents','Documents'],
+      ['emails','Emails'],['meetings','Meetings'],['spreadsheets','Spreadsheets'],['calendar','Calendar'],
+      ['insights','Insights'],['actions','Actions'],['bookmarks','Bookmarks']
+    ];
+    const navItems = navKeys.map(([key,label]) => {
+      const active = view === key;
+      return {
+        label,
+        select: () => this.setView(key),
+      };
+    });
+    // style differences (bg/color) are applied via inline literal below using active flag is not possible in template holes,
+    // so instead we vary via distinct rendered markup per item using precomputed strings:
+    const styledNav = navKeys.map(([key,label]) => {
+      const active = view === key;
+      return {
+        label,
+        select: () => this.setView(key),
+        rowBg: active ? 'rgba(255,255,255,0.10)' : 'transparent',
+        textColor: active ? '#ffffff' : '#aab0d4',
+        textWeight: active ? '700' : '400',
+        dotBg: active ? '#4f6bff' : 'rgba(255,255,255,0.18)',
+      };
+    });
+
+    const sources = [
+      { key:'drive', code:'Dr', color:'#2f80ed', name:'Google Drive', count:'4,120', unit:'files', sync:'6 mins ago' },
+      { key:'gmail', code:'Gm', color:'#ef4444', name:'Gmail', count:'12,480', unit:'emails', sync:'4 mins ago' },
+      { key:'docs', code:'Dc', color:'#3b82f6', name:'Google Docs', count:'860', unit:'documents', sync:'6 mins ago' },
+      { key:'sheets', code:'Sh', color:'#16a34a', name:'Google Sheets', count:'512', unit:'spreadsheets', sync:'6 mins ago' },
+      { key:'slides', code:'Sl', color:'#f59e0b', name:'Google Slides', count:'214', unit:'presentations', sync:'7 mins ago' },
+      { key:'cal', code:'Ca', color:'#6366f1', name:'Google Calendar', count:'1,890', unit:'events', sync:'5 mins ago' },
+      { key:'gemini', code:'Ge', color:'#8b5cf6', name:'Gemini', count:'340', unit:'AI threads', sync:'3 mins ago' },
+    ];
+
+    const documentsAll = [
+      { code:'Dr', color:'#2f80ed', title:'Project Nova – Partnership Overview', source:'Google Drive', path:'/Strategic Partnerships/Nova', time:'10:12 AM', score:95 },
+      { code:'PDF', color:'#ef4444', title:'Project Nova Kickoff – Meeting Minutes', source:'Google Drive', path:'/Meetings/Nova', time:'Yesterday', score:92 },
+      { code:'Sh', color:'#16a34a', title:'Project Nova Tracking Sheet', source:'Google Drive', path:'/Projects/Nova', time:'2 days ago', score:88 },
+      { code:'Dc', color:'#3b82f6', title:'Proposal: Joint Initiative with Nova Partners', source:'Google Drive', path:'/Proposals/2026/Nova', time:'3 days ago', score:85 },
+      { code:'Gm', color:'#ef4444', title:'RE: Follow up – Nova collaboration', source:'Gmail', path:'Alex Kim', time:'5 days ago', score:82 },
+      { code:'Sl', color:'#f59e0b', title:'Nova Roadmap Slides', source:'Google Slides', path:'/Presentations/Nova', time:'1 week ago', score:78 },
+    ];
+
+    const overviewStats = [
+      { label:'Total Sources', value:'7', sub:'Google Workspace' },
+      { label:'Total Documents', value:'5,706', sub:'Across all sources' },
+      { label:'Total Emails', value:'12,480', sub:'Indexed' },
+      { label:'Total Meetings', value:'1,890', sub:'Indexed' },
+      { label:'Last Sync', value:'6 mins ago', sub:'All sources up to date' },
+    ];
+
+    const recentActivity = [
+      { text:'Indexed 84 new files from Drive', time:'12 mins ago' },
+      { text:'Indexed 210 new emails', time:'20 mins ago' },
+      { text:'Indexed 9 new meeting events', time:'40 mins ago' },
+    ];
+
+    const topQueries = [
+      { rank:1, label:'Project Nova', count:34, pct:100 },
+      { rank:2, label:'Q3 roadmap', count:27, pct:79 },
+      { rank:3, label:'Ops review', count:19, pct:56 },
+      { rank:4, label:'Partnership proposal', count:15, pct:44 },
+      { rank:5, label:'Team onboarding', count:11, pct:32 },
+    ];
+
+    const emails = [
+      { subject:'RE: Follow up – Nova collaboration', from:'Alex Kim', snippet:"Thanks for sending over the proposal — let's schedule a call this week.", date:'5 days ago' },
+      { subject:'Nova Partnership – Next Steps', from:'Jamie Lee', snippet:'Following our call, here are the next steps we agreed on.', date:'1 week ago' },
+      { subject:'Invoice #4482 – Q3 Services', from:'Billing Team', snippet:'Attached is the invoice for Q3 services rendered.', date:'1 week ago' },
+      { subject:'Weekly Ops Digest', from:'Ops Bot', snippet:"Here's your weekly summary of workspace activity.", date:'2 weeks ago' },
+      { subject:'Meeting reschedule – Ops Review', from:'Morgan Singh', snippet:'Can we move our sync to Thursday instead?', date:'2 weeks ago' },
+    ];
+
+    const meetings = [
+      { title:'Project Nova Kickoff', date:'Today', time:'2:00 PM', attendees:['AK','JL','MS'], linkedDoc:'Kickoff Minutes' },
+      { title:'Partnership Sync – Nova', date:'Yesterday', time:'10:00 AM', attendees:['AK','RB'], linkedDoc:'Sync Notes' },
+      { title:'Weekly Ops Review', date:'2 days ago', time:'9:30 AM', attendees:['DS','JL','MS'], linkedDoc:'Ops Review Doc' },
+      { title:'Q3 Planning', date:'3 days ago', time:'11:00 AM', attendees:['AK','DS'], linkedDoc:'Q3 Plan Sheet' },
+    ];
+
+    const weekDays = [
+      { name:'Mon', num:14, has:true }, { name:'Tue', num:15, has:false }, { name:'Wed', num:16, has:true },
+      { name:'Thu', num:17, has:true }, { name:'Fri', num:18, has:false }, { name:'Sat', num:19, has:false }, { name:'Sun', num:20, has:false },
+    ];
+
+    const usageBySource = [
+      { name:'Google Drive', pct:42, color:'#2f80ed' },
+      { name:'Gmail', pct:28, color:'#ef4444' },
+      { name:'Google Docs', pct:12, color:'#3b82f6' },
+      { name:'Google Sheets', pct:10, color:'#16a34a' },
+      { name:'Google Calendar', pct:8, color:'#6366f1' },
+    ];
+
+    const impactItems = [
+      { label:'Faster knowledge access' }, { label:'Smarter decision-making' }, { label:'Reduced manual work' },
+      { label:'Enterprise-wide search' }, { label:'Higher team productivity' },
+    ];
+
+    const spreadsheetItems = [
+      { title:'Project Nova Tracking Sheet', path:'/Projects/Nova', modified:'2 days ago' },
+      { title:'Q3 Roadmap Tracker', path:'/Planning/Q3', modified:'1 week ago' },
+      { title:'Team Capacity Planner', path:'/Ops/Capacity', modified:'2 weeks ago' },
+    ];
+
+    const actionItems = [
+      { title:'Draft email reply', desc:'Auto-generate a reply based on thread context.', app:'Gmail' },
+      { title:'Update tracking sheet', desc:'Append meeting outcomes to a project sheet.', app:'Sheets' },
+      { title:'Create calendar event', desc:'Schedule a follow-up meeting from a chat request.', app:'Calendar' },
+      { title:'Summarize document', desc:'Generate an AI summary and save it to Drive.', app:'Drive' },
+    ];
+
+    const bookmarkItems = [
+      { code:'Dr', color:'#2f80ed', title:'Project Nova – Partnership Overview', source:'Google Drive' },
+      { code:'Sh', color:'#16a34a', title:'Q3 Roadmap Tracker', source:'Google Sheets' },
+    ];
+
+    const flowStages = [
+      { step:'01', type:'TRIGGER', color:'#22d3ee', title:'Chat Trigger', desc:'Staff submits a request in natural language.', isBranch:false },
+      { step:'02', type:'AI AGENT', color:'#818cf8', title:'Understand Intent', desc:'AI Brain parses the request and extracts intent & entities.', isBranch:false },
+      { step:'03', type:'ROUTER', color:'#f97316', title:'n8n: Route & Orchestrate', desc:'An n8n switch node determines which workspace sources to query.', isBranch:false },
+      { step:'04', type:'HTTP REQUEST', color:'#3b82f6', title:'Enterprise Data Sources', desc:'Parallel n8n HTTP Request nodes call each Google Workspace API.', isBranch:true },
+      { step:'05', type:'MERGE', color:'#f97316', title:'Merge & Embed', desc:'n8n merges results and generates vector embeddings.', isBranch:false },
+      { step:'06', type:'VECTOR STORE', color:'#22c55e', title:'Vector Database', desc:'Embeddings are indexed in pgvector for semantic retrieval.', isBranch:false },
+      { step:'07', type:'AI MODEL', color:'#a855f7', title:'Generate Response', desc:'Gemini processes retrieved context and drafts the answer.', isBranch:false },
+      { step:'08', type:'RESPOND', color:'#22d3ee', title:'Respond to Webhook', desc:'AI Brain returns the answer and can trigger further actions.', isBranch:false },
+    ];
+
+    const techStackItems = [
+      { label:'Google Workspace APIs', sub:'Drive · Gmail · Docs · Sheets · Slides · Calendar' },
+      { label:'n8n Orchestration', sub:'Workflow automation & routing' },
+      { label:'Gemini / AI Models', sub:'LLM reasoning & generation' },
+      { label:'Vector Database', sub:'pgvector semantic index' },
+    ];
+
+    return {
+      navItems: styledNav,
+      isChat: view === 'chat', isDashboard: view === 'dashboard', isSources: view === 'sources',
+      isDocuments: view === 'documents', isEmails: view === 'emails', isMeetings: view === 'meetings',
+      isCalendar: view === 'calendar', isInsights: view === 'insights', isSpreadsheets: view === 'spreadsheets',
+      isActions: view === 'actions', isBookmarks: view === 'bookmarks',
+      sources, documentsAll, documentsTop: documentsAll.slice(0, 5),
+      overviewStats, recentActivity, topQueries, emails, meetings, weekDays, usageBySource,
+      impactItems, spreadsheetItems, actionItems, bookmarkItems, flowStages, techStackItems,
+    };
+  }
+}
+</script>
+</body>
+</html>
